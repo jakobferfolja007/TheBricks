@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<title> Supernova Smash</title>
+<link rel="icon" href="img/logo.ico" type="image/icon-x">
+
+<link rel="stylesheet" href="css/style.css">
+<script src="js/jQuery.js"></script>
+</head>
+
+<body onload="drawIt()">
+
+<div class="outer">
+
+  <div class="header">
+    Supernova Smash
+  </div>
+
+  <div class="time-row">
+    Čas: <span id="cas">00:00</span> |
+    Točke: <span id="tocke">0</span> |
+    Nivo: <span id="nivo">1</span>
+  </div>
+
+  <div class="main">
+
+    <div class="left-side">
+
+      <div class="game">
+        <canvas id="canvas" width="800" height="500"></canvas>
+      </div>
+
+      <div class="bottom-row">
+        <div class="buttons">
+          <button onclick="location.reload()">Restart</button>
+          <button onclick="prikaziNavodila()">Navodila</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="results">
+      <div class="results-title">Rezultati</div>
+      <ul id="rezultati"></ul>
+      <button onclick="resetRezultate()">Reset rezultatov</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
