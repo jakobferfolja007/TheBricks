@@ -315,7 +315,7 @@ function shraniRezultat(ime, nivo, cas) {
     seznam.push(ime + ";" + nivo + ";" + cas);
 
     if (seznam.length > 4) {
-        seznam.shift();
+        seznam.shift();//FIFO
     }
 
     localStorage.setItem("rezultati", seznam.join("|"));
