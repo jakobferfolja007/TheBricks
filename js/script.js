@@ -314,7 +314,7 @@ function shraniRezultat(ime, nivo, cas) {
 
     seznam.push(ime + ";" + nivo + ";" + cas);
 
-    if (seznam.length > 4) {
+    if (seznam.length > 5) {
         seznam.shift();//FIFO
     }
 
