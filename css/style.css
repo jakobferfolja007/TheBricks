@@ -1,16 +1,18 @@
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: radial-gradient(circle at top, #0b0f2a, #000000);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  color: white;
+  color: rgb(255, 255, 255);
+
+  /* pomembno: BREZ flexa */
+  display: block;
+
+  /* priporočljivo: odstrani hidden */
+  overflow: visible;
 }
 
 /* GLAVNI OKVIR */
@@ -20,8 +22,18 @@ body {
   background: rgba(10, 10, 30, 0.9);
   border: 2px solid #00ffff;
   padding: 20px;
+
   display: flex;
   flex-direction: column;
+
+  /* centriranje brez flex na body */
+  margin: auto;
+
+  /* za vertikalno centriranje */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* HEADER */
@@ -126,3 +138,4 @@ button:hover {
   border-bottom: 1px solid #00ffff;
   padding-bottom: 5px;
 }
+

@@ -2,8 +2,8 @@ function drawIt() {
 
 var x = 150;
 var y = 150;
-var dx = 2;
-var dy = -4;
+var dx = 3;     // stalna hitrost
+var dy = -5;    // stalna hitrost
 var ctx;
 var WIDTH;
 var HEIGHT;
@@ -11,7 +11,7 @@ var r = 10;
 
 var paddlex;
 var paddleh;
-var paddlew;
+var paddlew = 140; // stalna širina
 
 var rightDown = false;
 var leftDown = false;
@@ -35,7 +35,6 @@ var intervalId;
 
 var launch = false;
 
-var nivo = 1;
 
 var paddlecolor = "#00f0ff";
 var ballcolor = "#ffffff";
@@ -47,7 +46,7 @@ HEIGHT = $("#canvas").height();
 
 init_paddle();
 initbricks();
-nastaviNivo();
+
 
 sekunde = 0;
 izpisTimer = "00:00";
@@ -61,39 +60,33 @@ intervalId = setInterval(draw, 10);
 prikaziRezultate();
 }
 
-function nastaviNivo() {
-    if (nivo == 1) {
-        dx = 2;
-        dy = -4;
-        paddlew = 160;
+function vseOpekeRazbite() {
+    for (var i = 0; i < NROWS; i++) {
+        for (var j = 0; j < NCOLS; j++) {
+            if (bricks[i][j] > 0) {
+                return false;
+            }
+        }
     }
-    else if (nivo == 2) {
-        dx = 3;
-        dy = -5;
-        paddlew = 120;
-    }
-    else if (nivo == 3) {
-        dx = 5;
-        dy = -6;
-        paddlew = 90;
-    }
+    return true;
 }
 
+
 function circle(x, y, r) {
-  let gradient = ctx.createRadialGradient(x, y, 2, x, y, r);
-  gradient.addColorStop(0, "#ffffff");
-  gradient.addColorStop(1, ballcolor);
+let gradient = ctx.createRadialGradient(x, y, 2, x, y, r);
+gradient.addColorStop(0, "#ffffff");
+gradient.addColorStop(1, ballcolor);
 
-  ctx.shadowBlur = 15;
-  ctx.shadowColor = ballcolor;
+ctx.shadowBlur = 15;
+ctx.shadowColor = ballcolor;
 
-  ctx.fillStyle = gradient;
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, Math.PI * 2, true);
-  ctx.closePath();
-  ctx.fill();
+ctx.fillStyle = gradient;
+ctx.beginPath();
+ctx.arc(x, y, r, 0, Math.PI * 2, true);
+ctx.closePath();
+ctx.fill();
 
-  ctx.shadowBlur = 0;
+ctx.shadowBlur = 0;
 }
 
 function rect(x, y, w, h) {
@@ -110,22 +103,21 @@ ctx.clearRect(0, 0, WIDTH, HEIGHT);
 function init_paddle() {
 paddlex = WIDTH / 2;
 paddleh = 10;
-paddlew = 140;
 }
 
 function initbricks() {
-NROWS = 8;
-NCOLS = 8;
+NROWS = 5;
+NCOLS = 6;
 BRICKWIDTH = (WIDTH / NCOLS) - 1;
 BRICKHEIGHT = 18;
 PADDING = 1;
 
 bricks = [];
 for (var i = 0; i < NROWS; i++) {
-    bricks[i] = [];
-    for (var j = 0; j < NCOLS; j++) {
-        bricks[i][j] = Math.floor(Math.random() * 5) + 1;
-    }
+bricks[i] = [];
+for (var j = 0; j < NCOLS; j++) {
+bricks[i][j] = Math.floor(Math.random() * 5) + 1;
+}
 }
 }
 
@@ -133,70 +125,73 @@ function draw() {
 clear();
 
 if (!launch) {
-    x = paddlex + paddlew / 2;
-    y = HEIGHT - paddleh - r;
+x = paddlex + paddlew / 2;
+y = HEIGHT - paddleh - r;
 }
 
 ctx.fillStyle = ballcolor;
 circle(x, y, r);
 
 if (rightDown) {
-    if ((paddlex + paddlew) < WIDTH) paddlex += 5;
-    else paddlex = WIDTH - paddlew;
+if ((paddlex + paddlew) < WIDTH) paddlex += 5;
+else paddlex = WIDTH - paddlew;
 } else if (leftDown) {
-    if (paddlex > 0) paddlex -= 5;
-    else paddlex = 0;
+if (paddlex > 0) paddlex -= 5;
+else paddlex = 0;
 }
 
 ctx.fillStyle = paddlecolor;
 rect(paddlex, HEIGHT - paddleh, paddlew, paddleh);
 
 for (var i = 0; i < NROWS; i++) {
-    for (var j = 0; j < NCOLS; j++) {
-       if (bricks[i][j] > 0) {
+for (var j = 0; j < NCOLS; j++) {
+if (bricks[i][j] > 0) {
 
-    let color1, color2;
 
-    if (bricks[i][j] == 5) {
-        color1 = "#ff5fa2";
-        color2 = "#ff2d75";
-    }
-    else if (bricks[i][j] == 4) {
-        color1 = "#c77dff";
-        color2 = "#a100ff";
-    }
-    else if (bricks[i][j] == 3) {
-        color1 = "#66e0ff";
-        color2 = "#00c3ff";
-    }
-    else if (bricks[i][j] == 2) {
-        color1 = "#66ff66";
-        color2 = "#00cc44";
-    }
-    else {
-        color1 = "#ffff99";
-        color2 = "#ffcc00";
-    }
+let color1, color2;
 
-    let grad = ctx.createLinearGradient(0, 0, 0, BRICKHEIGHT);
-    grad.addColorStop(0, color1);
-    grad.addColorStop(1, color2);
-
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = color2;
-
-    ctx.fillStyle = grad;
-
-    rect(
-        (j * (BRICKWIDTH + PADDING)) + PADDING,
-        (i * (BRICKHEIGHT + PADDING)) + PADDING,
-        BRICKWIDTH,
-        BRICKHEIGHT
-    );
-
-    ctx.shadowBlur = 0;
+if (bricks[i][j] == 5) {
+    color1 = "#ff5fa2";
+    color2 = "#ff2d75";
 }
-    }
+else if (bricks[i][j] == 4) {
+    color1 = "#c77dff";
+    color2 = "#a100ff";
+}
+else if (bricks[i][j] == 3) {
+    color1 = "#66e0ff";
+    color2 = "#00c3ff";
+}
+else if (bricks[i][j] == 2) {
+    color1 = "#66ff66";
+    color2 = "#00cc44";
+}
+else {
+    color1 = "#ffff99";
+    color2 = "#ffcc00";
+}
+
+let grad = ctx.createLinearGradient(0, 0, 0, BRICKHEIGHT);
+grad.addColorStop(0, color1);
+grad.addColorStop(1, color2);
+
+ctx.shadowBlur = 15;
+ctx.shadowColor = color2;
+
+ctx.fillStyle = grad;
+
+rect(
+    (j * (BRICKWIDTH + PADDING)) + PADDING,
+    (i * (BRICKHEIGHT + PADDING)) + PADDING,
+    BRICKWIDTH,
+    BRICKHEIGHT
+);
+
+ctx.shadowBlur = 0;
+
+
+}
+}
 }
 
 var rowheight = BRICKHEIGHT + PADDING;
@@ -205,58 +200,103 @@ var row = Math.floor(y / rowheight);
 var col = Math.floor(x / colwidth);
 
 if (y < NROWS * rowheight && row >= 0 && col >= 0) {
-   if (bricks[row][col] > 0) {
-    dy = -dy;
+if (bricks[row][col] > 0) {
+dy = -dy;
 
-    if (bricks[row][col] == 5) tocke += 20;
-    else if (bricks[row][col] == 4) tocke += 15;
-    else if (bricks[row][col] == 3) tocke += 10;
-    else if (bricks[row][col] == 2) tocke += 5;
-    else tocke += 1;
 
-    bricks[row][col]--;
+if (bricks[row][col] == 5) tocke += 20;
+else if (bricks[row][col] == 4) tocke += 15;
+else if (bricks[row][col] == 3) tocke += 10;
+else if (bricks[row][col] == 2) tocke += 5;
+else tocke += 1;
+
+bricks[row][col]--;
+
+if (vseOpekeRazbite()) {
+        clearInterval(intervalId);
+         clearInterval(intTimer);   
+        start = false;    
+
+        Swal.fire({
+            title: "Zmagal si! ",
+            backdrop: false,
+            html:
+                "Točke: <b>" + tocke + "</b><br>" +
+                "Čas: <b>" + izpisTimer + "</b><br><br>" +
+                "Vnesi svoje ime:",
+            input: "text",
+            inputPlaceholder: "Tvoje ime",
+            showCancelButton: true,
+            confirmButtonText: "Shrani",
+            cancelButtonText: "Brez imena"
+        }).then((result) => {
+
+            let ime = result.value;
+            if (!ime) ime = "Zmagovalec ";
+
+            shraniRezultat(ime, izpisTimer, tocke);
+            prikaziRezultate();
+        });
+
+        return;
+    }
+
 }
 
+
+}
 $("#tocke").html(tocke);
 
-if (tocke >= 130 && nivo == 1) {
-    nivo = 2;
-    nastaviNivo();
-}
-else if (tocke >= 240 && nivo == 2) {
-    nivo = 3;
-    nastaviNivo();
-}
 
-$("#nivo").html(nivo);
-}
+
 
 if (x + dx > WIDTH - r || x + dx < r) dx = -dx;
 
 if (y + dy < r) dy = -dy;
 else if (y + dy > HEIGHT - r) {
 
-    start = false;
 
-    if (x > paddlex && x < paddlex + paddlew) {
-        dx = 8 * ((x - (paddlex + paddlew / 2)) / paddlew);
-        dy = -dy;
-        start = true;
-    } else {
+start = false;
 
-        clearInterval(intervalId);
+if (x > paddlex && x < paddlex + paddlew) {
+    dx = 8* ((x - (paddlex + paddlew / 2)) / paddlew);
+    dy = -dy;
+    start = true;
+} else {
 
-        let ime = prompt("Vnesi ime:");
+    clearInterval(intervalId);
+
+    Swal.fire({
+        title: "Game Over 🎮",
+        backdrop:false,
+        html:
+            "Točke: <b>" + tocke + "</b><br>" +
+            // "Nivo: <b>" + nivo + "</b><br>" +
+            "Čas: <b>" + izpisTimer + "</b><br><br>" +
+            "Vnesi svoje ime:",
+        input: "text",
+        inputPlaceholder: "Tvoje ime",
+        showCancelButton: true,
+        confirmButtonText: "Shrani",
+        cancelButtonText: "Brez imena"
+    }).then((result) => {
+
+        let ime = result.value;
         if (!ime) ime = "Anonimen";
 
-        shraniRezultat(ime, nivo, izpisTimer);
+        //  shraniRezultat(ime, nivo, izpisTimer, tocke);
+        shraniRezultat(ime, izpisTimer, tocke);
+
         prikaziRezultate();
-    }
+    });
+}
+
+
 }
 
 if (launch) {
-    x += dx;
-    y += dy;
+x += dx;
+y += dy;
 }
 }
 
@@ -277,7 +317,7 @@ if (evt.keyCode == 39) rightDown = true;
 else if (evt.keyCode == 37) leftDown = true;
 
 if (evt.keyCode == 32 && !launch) {
-    launch = true;
+launch = true;
 }
 }
 
@@ -294,60 +334,80 @@ init();
 
 // NAVODILA
 function prikaziNavodila() {
-    alert(
-        "NAVODILA:\n\n" +
-        "- Premik: levo/desno (puščice)\n" +
-        "- SPACE za začetek\n" +
-        "- Razbij vse opeke"
-    );
+Swal.fire({
+title: "Navodila",
+backdrop:false,
+html:
+"Premik: puščice<br>" +
+"SPACE za začetek<br>" +
+" Razbij vse opeke!",
+icon: "info"
+});
 }
 
-// LOCAL STORAGE
-function shraniRezultat(ime, nivo, cas) {
+// LOCAL STORAGE (brez nivoja)
+function shraniRezultat(ime, cas, tocke) {
+let podatki = localStorage.getItem("rezultati");
+let seznam = [];
 
-    let podatki = localStorage.getItem("rezultati");
-    let seznam = [];
 
-    if (podatki) {
-        seznam = podatki.split("|");
-    }
+if (podatki) seznam = podatki.split("|");
 
-    seznam.push(ime + ";" + nivo + ";" + cas);
+seznam.push(ime + ";" + cas + ";" + tocke);
 
-    if (seznam.length > 5) {
-        seznam.shift();//FIFO
-    }
+if (seznam.length > 5) seznam.shift();
 
-    localStorage.setItem("rezultati", seznam.join("|"));
+localStorage.setItem("rezultati", seznam.join("|"));
+
+
 }
 
 function prikaziRezultate() {
+let podatki = localStorage.getItem("rezultati");
+let seznam = $("#rezultati");
 
-    let podatki = localStorage.getItem("rezultati");
-    let seznam = $("#rezultati");
 
-    seznam.empty();
+seznam.empty();
+if (!podatki) return;
 
-    if (!podatki) return;
+let vnosi = podatki.split("|");
 
-    let vnosi = podatki.split("|");
+vnosi.forEach(vnos => {
+    let deli = vnos.split(";");
 
-    vnosi.forEach(vnos => {
-        let deli = vnos.split(";");
+    seznam.append(
+        "<li><strong>" + deli[0] + "</strong><br>" +
+        //  "Nivo: " + deli[1] + "<br>" +
+        "Čas: " + deli[1] + "<br>" +
+        "Točke: " + deli[2] + "</li>"
+    );
+});
 
-        seznam.append(
-            "<li><strong>" + deli[0] + "</strong><br>" +
-            "Nivo: " + deli[1] + "<br>" +
-            "Čas: " + deli[2] + "</li>"
-        );
-    });
+
 }
 
+// RESET
 function resetRezultate() {
+Swal.fire({
+title: "Si prepričan?",
+backdrop:false,
+text: "Vsi rezultati bodo izbrisani!",
+icon: "warning",
+showCancelButton: true,
+confirmButtonText: "Da, izbriši",
+cancelButtonText: "Prekliči"
+}).then((result) => {
+if (result.isConfirmed) {
+localStorage.removeItem("rezultati");
+prikaziRezultate();
 
-    if (confirm("Ali želiš izbrisati vse rezultate?")) {
-        localStorage.removeItem("rezultati");
-        prikaziRezultate();
+
+        Swal.fire({   
+            title:"Izbrisano!",
+             backdrop:false,
+              icon:"success"});
     }
+});
+
 
 }
