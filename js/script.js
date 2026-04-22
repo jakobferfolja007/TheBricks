@@ -1,27 +1,47 @@
 function drawIt() {
+// --- 1. PRIDOBIVANJE TEŽAVNOSTI ---
+var difficulty = localStorage.getItem("difficulty") || "srednje";
 
+// --- 2. NASTAVITEV PARAMETROV GLEDE NA TEŽAVNOST ---
+var speed, pWidth;
+
+if (difficulty === "lahko") {
+    speed = 3;
+    pWidth = 200;
+} else if (difficulty === "tezko") {
+    speed = 7;
+    pWidth = 90;
+} else { // privzeto "srednje"
+    speed = 5;
+    pWidth = 140;
+}
+
+// --- 3. DINAMIČNE SPREMENLJIVKE IGRE ---
 var x = 150;
 var y = 150;
-var dx = 3;     // stalna hitrost
-var dy = -5;    // stalna hitrost
+var dx = speed;     // Hitrost nastavljena glede na težavnost
+var dy = -speed;    // Hitrost nastavljena glede na težavnost
+var r = 10;
+
+var paddlew = pWidth; // Širina ploščadi nastavljena glede na težavnost
+var paddlex;
+var paddleh;
+
+var paddlecolor = "#00f0ff";
+var ballcolor = "#ffffff";
+
+// --- 4. STANJE IN KONTROLE ---
+var rightDown = false;
+var leftDown = false;
+var start = true;
+var launch = false;
+var tocke = 0;
+
+// --- 5. OKOLJE IN ČASOVNIK ---
 var ctx;
 var WIDTH;
 var HEIGHT;
-var r = 10;
-
-var paddlex;
-var paddleh;
-var paddlew = 140; // stalna širina
-
-var rightDown = false;
-var leftDown = false;
-
-var bricks;
-var NROWS;
-var NCOLS;
-var BRICKWIDTH;
-var BRICKHEIGHT;
-var PADDING;
+var intervalId;
 
 var sekunde;
 var sekundeI;
@@ -29,15 +49,32 @@ var minuteI;
 var intTimer;
 var izpisTimer;
 
-var tocke;
-var start = true;
-var intervalId;
+// --- 6. OPEKE (BRICKS) ---
+var bricks;
+var NROWS;
+var NCOLS;
+var BRICKWIDTH;
+var BRICKHEIGHT;
+var PADDING;
 
-var launch = false;
+// Posodobitev izpisa nivoja v HTML glavi
+document.getElementById("nivo").innerHTML = difficulty.toUpperCase();
 
-
-var paddlecolor = "#00f0ff";
-var ballcolor = "#ffffff";
+if (difficulty === "1") {
+    dx = 2;
+    dy = -3;
+    paddlew = 160;
+}
+else if (difficulty === "2") {
+    dx = 4;
+    dy = -5;
+    paddlew = 120;
+}
+else if (difficulty === "3") {
+    dx = 6;
+    dy = -7;
+    paddlew = 90;
+}
 
 function init() {
 ctx = $('#canvas')[0].getContext("2d");
@@ -234,7 +271,7 @@ if (vseOpekeRazbite()) {
             let ime = result.value;
             if (!ime) ime = "Zmagovalec ";
 
-            shraniRezultat(ime, izpisTimer, tocke);
+            shraniRezultat(ime, izpisTimer, tocke, difficulty);
             prikaziRezultate();
         });
 
@@ -285,7 +322,7 @@ if (x > paddlex && x < paddlex + paddlew) {
         if (!ime) ime = "Anonimen";
 
         //  shraniRezultat(ime, nivo, izpisTimer, tocke);
-        shraniRezultat(ime, izpisTimer, tocke);
+        shraniRezultat(ime, izpisTimer, tocke, difficulty);
 
         prikaziRezultate();
     });
@@ -346,14 +383,14 @@ icon: "info"
 }
 
 // LOCAL STORAGE (brez nivoja)
-function shraniRezultat(ime, cas, tocke) {
+function shraniRezultat(ime, cas, tocke, nivo) {
 let podatki = localStorage.getItem("rezultati");
 let seznam = [];
 
 
 if (podatki) seznam = podatki.split("|");
 
-seznam.push(ime + ";" + cas + ";" + tocke);
+seznam.push(ime + ";" + cas + ";" + tocke + ";" + nivo);
 
 if (seznam.length > 5) seznam.shift();
 
@@ -379,7 +416,8 @@ vnosi.forEach(vnos => {
         "<li><strong>" + deli[0] + "</strong><br>" +
         //  "Nivo: " + deli[1] + "<br>" +
         "Čas: " + deli[1] + "<br>" +
-        "Točke: " + deli[2] + "</li>"
+        "Točke: " + deli[2] + "<br>"+
+        "Nivo: "+ deli[3] +"</li>"
     );
 });
 

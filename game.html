@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<title> Odbij in razbij</title>
+<link rel="icon" href="img/logo.ico" type="image/icon-x">
+
+<link rel="stylesheet" href="css/style.css">
+<script src="js/jQuery.js"></script>
+
+</head>
+
+<body onload="drawIt()">
+
+<div class="outer">
+
+  <div class="header">
+    Odbij in razbij
+  </div>
+
+  <div class="time-row">
+    Čas: <span id="cas">00:00</span> |
+    Točke: <span id="tocke">0</span> |
+    Nivo: <span id="nivo">Lahko</span>
+  </div>
+
+  <div class="main">
+
+    <div class="left-side">
+
+      <div class="game">
+        <canvas id="canvas" width="800" height="500"></canvas>
+      </div>
+
+      <div class="bottom-row">
+        <div class="buttons">
+          <button onclick="location.reload()">Restart</button>
+          <a href="index.html">
+             <button>Nazaj</button>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="results">
+      <div class="results-title">Rezultati</div>
+      <ul id="rezultati"></ul>
+      <button onclick="resetRezultate()">Reset rezultatov</button>
+    </div>
+
+  </div>
+
+</div>
+
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -139,3 +139,25 @@ button:hover {
   padding-bottom: 5px;
 }
 
+.supernova-popup {
+    border: 2px solid #00f5ff;
+    box-shadow: 0 0 25px #00f5ff88;
+    border-radius: 10px;
+}
+
+.supernova-title {
+    text-shadow: 0 0 15px #00f5ff;
+}
+
+.supernova-btn {
+    background: transparent;
+    color: #00f5ff;
+    border: 2px solid #00f5ff;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.supernova-btn:hover {
+    background: #00f5ff;
+    color: #000814;
+}

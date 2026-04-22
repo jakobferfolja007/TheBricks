@@ -2,56 +2,164 @@
 <html lang="sl">
 <head>
 <meta charset="UTF-8">
-<title> Supernova Smash</title>
-<link rel="icon" href="img/logo.ico" type="image/icon-x">
+<title>Odbij in razbij</title>
 
-<link rel="stylesheet" href="css/style.css">
-<script src="js/jQuery.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> <!-- 🔥 POPRAVLJENO -->
+<!-- CSS -->
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at center, #020617, #000);
+    color: #00f5ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ANIMIRANO OZADJE */
+body::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(white 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.1;
+    animation: moveStars 60s linear infinite;
+}
+
+@keyframes moveStars {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-200px, -200px); }
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    border: 2px solid #00f5ff;
+    padding: 50px;
+    width: 350px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 25px #00f5ff88;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px #00f5ff;
+}
+
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 40px;
+    opacity: 0.7;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+button {
+    padding: 15px;
+    font-size: 18px;
+    background: transparent;
+    color: #00f5ff;
+    border: 2px solid #00f5ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    background: #00f5ff;
+    color: #000814;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00f5ff;
+}
+
+.easy {
+    border-color: #4be20f;
+    color: #06be2e;
+}
+
+.easy:hover {
+    background: #4be20f;
+    color: #000814;
+}
+
+.medium {
+    border-color: #ffb703;
+    color: #ffb703;
+}
+
+.medium:hover {
+    background: #ffb703;
+    color: #000814;
+}
+
+.hard {
+    border-color: #ff2e63;
+    color: #ff2e63;
+}
+
+.hard:hover {
+    background: #ff2e63;
+    color: black;
+}
+</style>
+
 </head>
 
-<body onload="drawIt()">
+<body>
 
-<div class="outer">
+<div class="container">
+    <h1>Odbij in razbij</h1>
+    <div class="subtitle">Izberi težavnost</div>
 
-  <div class="header">
-    Supernova Smash
-  </div>
-
-  <div class="time-row">
-    Čas: <span id="cas">00:00</span> |
-    Točke: <span id="tocke">0</span> |
-    Nivo: <span id="nivo">1</span>
-  </div>
-
-  <div class="main">
-
-    <div class="left-side">
-
-      <div class="game">
-        <canvas id="canvas" width="800" height="500"></canvas>
-      </div>
-
-      <div class="bottom-row">
-        <div class="buttons">
-          <button onclick="location.reload()">Restart</button>
-          <button onclick="prikaziNavodila()">Navodila</button>
-        </div>
-      </div>
-
+    <div class="buttons">
+        <button class="easy" onclick="startGame('lahko')">LAHKO</button>
+        <button class="medium" onclick="startGame('srednje')">SREDNJE</button>
+        <button class="hard" onclick="startGame('tezko')">TEŽKO</button>
+        <button onclick="showInstructions()">NAVODILA</button>
     </div>
-
-    <div class="results">
-      <div class="results-title">Rezultati</div>
-      <ul id="rezultati"></ul>
-      <button onclick="resetRezultate()">Reset rezultatov</button>
-    </div>
-
-  </div>
-
 </div>
 
-<script src="js/script.js"></script>
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- JavaScript -->
+<script>
+function startGame(difficulty) {
+    localStorage.setItem("difficulty", difficulty);
+
+    Swal.fire({
+        title: 'Začetek igre',
+        text: 'Izbrana težavnost: ' + difficulty,
+        icon: 'success',
+        backdrop: false,
+        confirmButtonText: 'Naprej'
+    });
+
+    window.location.href = "game.html";
+}
+
+function showInstructions() {
+    Swal.fire({
+        title: "Navodila",
+        backdrop: false,
+        html:
+            "Premik: puščice<br>" +
+            "SPACE za začetek<br>" +
+            "Razbij vse opeke!",
+        icon: "info",
+        confirmButtonText: "Zapri"
+    });
+}
+</script>
+
 </body>
 </html>
