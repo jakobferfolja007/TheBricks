@@ -117,7 +117,7 @@ button:hover {
 <body>
 
 <div class="container">
-    <h1>Odbij in razbij</h1>
+    <h1 onclick="showCredits()">Odbij in razbij</h1>
     <div class="subtitle">Izberi težavnost</div>
 
     <div class="buttons">
@@ -157,6 +157,18 @@ function showInstructions() {
             "Razbij vse opeke!",
         icon: "info",
         confirmButtonText: "Zapri"
+    });
+}
+function showCredits() {
+    Swal.fire({
+        title: 'Credits ',
+        html: `
+            <b>Avtor:</b> Jakob Ferfolja<br>
+            <b>Razred:</b> 4.RA<br>
+        `,
+        icon: 'info',
+        backdrop: false,
+        confirmButtonText: 'Zapri'
     });
 }
 </script>
